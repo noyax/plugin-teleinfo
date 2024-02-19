@@ -11,8 +11,11 @@ import json
 import sys
 import traceback
 import globals
-import paho.mqtt.client as mqtt_client
+import random
+from paho.mqtt import client as mqtt_client
 from threading import Thread, Lock
+
+client_id = f'python-mqtt-{random.randint(0, 1000)}'
 
 try:
     from jeedom.jeedom import *
@@ -161,7 +164,9 @@ def listen_mqtt():
     logging.info("MQTT------Preparing Teleinfo...")
     logging.info('MQTT------Read Socket Thread Launched')
     logging.info("MQTT------Start listening MQTT...")
-    client = mqtt_client.Client( client_id="", clean_session=True)
+    
+    #client = mqtt_client.Client( client_id="", clean_session=True)
+    client = mqtt_client.Client(mqtt_client.CallbackAPIVersion.VERSION1, client_id, clean_session=True)
 
     # Assignation des fonctions de rappel
     client.on_message = mqtt_on_message
